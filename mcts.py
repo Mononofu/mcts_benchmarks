@@ -130,7 +130,7 @@ def get_iterations_for_time(desired_time, timer):
 
 
 def summarize(vs):
-  return '%6.1f ± %5.1f' % (np.mean(vs), np.std(vs))
+  return '%7.1f ± %5.1f' % (np.mean(vs), np.std(vs))
 
 
 def main():
@@ -140,7 +140,7 @@ def main():
 
   # return
 
-  benchmark_time = 0.3
+  benchmark_time = 1.0
   for num_actions in [18, 82, 362]:
     print()
     print('num_actions = ', num_actions)
