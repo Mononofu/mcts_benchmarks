@@ -15,10 +15,6 @@ class MuZeroConfig:
     self.discount = 0.997
 
 
-def format_vs(vs):
-  return ['%.2f' % v for v in vs]
-
-
 class Node:
   def __init__(self):
     self.expanded = False
@@ -79,7 +75,10 @@ class Node:
     return 'Node'
 
 
-def run_mcts(config: MuZeroConfig, num_simulations: int, num_actions=18):
+def run_mcts(config: MuZeroConfig,
+             num_simulations: int,
+             num_actions=18,
+             debug=False):
   root = Node()
   root.expand(np.random.rand(num_actions), reward=0)
 
@@ -92,15 +91,14 @@ def run_mcts(config: MuZeroConfig, num_simulations: int, num_actions=18):
       action, node = select_child(config, node)
       search_path.append((parent, action, node))
 
-    # print(search_path)
-
     node.expand(np.random.rand(num_actions), reward=np.random.rand())
 
     backpropagate(search_path,
                   value=np.random.rand(),
                   discount=config.discount)
 
-  # print(root)
+  if debug == True:
+    print(root)
 
 
 # Select the child with the highest UCB score.
@@ -135,10 +133,7 @@ def summarize(vs):
 
 def main():
   config = MuZeroConfig()
-  for _ in range(1):
-    run_mcts(config, num_simulations=50)
-
-  # return
+  run_mcts(config, num_simulations=50, debug=True)
 
   benchmark_time = 1.0
   for num_actions in [18, 82, 362]:
