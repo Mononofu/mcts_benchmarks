@@ -2,13 +2,15 @@
 
 Benchmarks for a minimal MCTS implementations in Python, to investigate the feasability of all-Python MCTS for research.
 
+MCTS implementation based on [MuZero pseudocode](https://arxiv.org/abs/1911.08265).
+
 Run with
 
 ```sh
 python3 mcts.py
 ```
 
-Results from a recent run on my machine (AMD Ryzen 3950X):
+Results from a recent run on my machine (AMD Ryzen 3950X), single thread:
 
 ```
 num_actions =  18
