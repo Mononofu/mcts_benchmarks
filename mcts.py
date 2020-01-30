@@ -133,28 +133,26 @@ def main():
 
   # return
 
-  benchmark_time = 1.0
-  for num_sims in [5, 10, 20, 50, 100, 200, 500]:
-    timer = timeit.Timer(lambda: run_mcts(config, num_sims), 'gc.enable()')
-    iterations = get_iterations_for_time(benchmark_time, timer)
-    times = timer.repeat(10, iterations)
-    searches_per_second = [iterations / t for t in times]
-    simulations_per_second = [s * num_sims for s in searches_per_second]
+  benchmark_time = 0.3
+  for num_actions in [18, 82, 362]:
+    print()
+    print('num_actions = ', num_actions)
+    for num_sims in [5, 10, 20, 50, 100, 200, 500]:
+      timer = timeit.Timer(
+          lambda: run_mcts(
+              config, num_simulations=num_sims, num_actions=num_actions),
+          'gc.enable()')
+      iterations = get_iterations_for_time(benchmark_time, timer)
+      times = timer.repeat(10, iterations)
+      searches_per_second = [iterations / t for t in times]
+      simulations_per_second = [s * num_sims for s in searches_per_second]
 
-    print('%3d sims / move: %s searches, %s sims per second' %
-          (num_sims, summarize(searches_per_second),
-           summarize(simulations_per_second)))
-
-  # Most recent run:
-  #   5 sims / move: 8675.5 ±  72.1 searches, 43377.4 ± 360.5 sims per second
-  #  10 sims / move: 4326.2 ±  14.9 searches, 43261.7 ± 149.2 sims per second
-  #  20 sims / move: 2015.2 ±   2.5 searches, 40304.4 ±  50.8 sims per second
-  #  50 sims / move:  684.0 ±   1.2 searches, 34198.2 ±  59.7 sims per second
-  # 100 sims / move:  312.9 ±   0.8 searches, 31288.7 ±  76.6 sims per second
-  # 200 sims / move:  146.3 ±   0.3 searches, 29269.6 ±  51.0 sims per second
-  # 500 sims / move:   52.3 ±   0.2 searches, 26128.8 ± 124.9 sims per second
+      print('%3d sims / move: %s searches, %s sims per second' %
+            (num_sims, summarize(searches_per_second),
+             summarize(simulations_per_second)))
 
 
-main()
+if __name__ == '__main__':
+  main()
 
 # benchmark with pyinstrument
