@@ -31,9 +31,16 @@ class Node:
     self.reward = reward
     self.child_visits = np.zeros_like(self.prior)
     self._child_values = np.zeros_like(self.prior)
-    self.children = [Node() for _ in range(len(prior))]
+    self._children = np.full_like(prior, None, np.object_)
     self.expanded = True
     self.visits = 1
+
+  def child(self, action):
+    child = self._children[action]
+    if child is None:
+      child = Node()
+      self._children[action] = child
+    return child
 
   def add_value(self, action, value):
     self.visits += 1
@@ -63,8 +70,8 @@ class Node:
     s = ' ' * indent
     s += 'Node'
     s += '\n'
-    for child in self.children:
-      if child.expanded:
+    for child in self._children:
+      if child is not None:
         s += child.__str__(indent=indent + 2)
     return s
 
@@ -106,7 +113,7 @@ def select_child(config: MuZeroConfig, node: Node):
   action = (node.normalized_values() + pb_c /
             (node.child_visits + 1) * node.prior).argmax()
 
-  return action, node.children[action]
+  return action, node.child(action)
 
 
 # At the end of a simulation, we propagate the evaluation all the way up the
