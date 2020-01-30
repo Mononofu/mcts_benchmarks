@@ -27,6 +27,10 @@ class Node:
     self.children = [Node() for _ in range(len(prior))]
     self.expanded = True
 
+  def add_value(self, action, value):
+    self.child_values[action] += value
+    self.child_visits[action] += 1
+
   def __str__(self, indent=0):
     s = ' ' * indent
     s += 'Node'
@@ -88,14 +92,12 @@ def select_child(config: MuZeroConfig, node: Node):
 # tree to the root.
 def backpropagate(search_path: List[Node], value: float, discount: float):
   for parent, action, node in search_path:
-    parent.child_values[action] += value
-    parent.child_visits[action] += 1
-
+    parent.add_value(action, value)
     value = node.reward + discount * value
 
 
 config = MuZeroConfig()
-for _ in range(1000000):
+for _ in range(1):
   run_mcts(config, num_simulations=50)
 
 
